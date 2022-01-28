@@ -45,7 +45,7 @@ class EmailSender extends Thread {
 	String content;
 	
 	@Override public void run() {	
-		send(target, "Member Activation", content);
+		send(target, subject, content);
 	}
 	
 	void send(String target,

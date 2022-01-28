@@ -69,7 +69,7 @@ class Register {
 				manager.getTransaction().commit();
 
 				Email e = new Email();
-				e.sendActivationCode(m.email, a.secret, m.code);
+				e.sendActivationCode(m.email, a.secret, a.code);
 			} catch (Exception e) {	
 				// member_register_duplicated_email
 				success = false;

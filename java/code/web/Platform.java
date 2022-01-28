@@ -15,8 +15,6 @@ class Platform {
 		return "home";
 	}
 	
-	// http://localhost:8864/member-activate?code=4&secret=XYZ
-	
 	@RequestMapping("/member-activate")
 	String activate(String secret, String code, Model model) {
 		boolean success = true;
