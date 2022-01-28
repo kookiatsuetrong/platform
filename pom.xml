@@ -1,6 +1,6 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>work.codestar</groupId>
+	<groupId>city.oldschool</groupId>
 	<artifactId>platform</artifactId>
 	<version>demo</version>
 	<properties>
@@ -33,9 +33,16 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>RELEASE</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
 			<version>RELEASE</version>
 		</dependency>
 	</dependencies>

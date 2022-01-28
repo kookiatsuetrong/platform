@@ -1,20 +1,25 @@
 package web;
+
+import javax.servlet.http.HttpSession;
 import javax.persistence.EntityManager;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 class Register {
 	
 	@RequestMapping("/member-register")
-	String showRegisterPage()
-	{
-		// TODO: If this user has been login, 
-		// redirect to his or her profile page
-		return "register";
+	String showRegisterPage(HttpSession session) {
+		Member m = (Member)session.getAttribute("member");
+		if (m == null) {
+			return "member-register";
+		} else {
+			return "redirect:/member-profile";
+		}
 	}
 	
 	@PostMapping("/member-register")
@@ -22,8 +27,7 @@ class Register {
 			String email,
 			@RequestParam("first-name") String first,
 			@RequestParam("last-name") String last,
-			String password)
-	{
+			String password) {
 		// member_register_invalid_email
 		// member_register_invalid_first_name
 		// member_register_invalid_last_name
@@ -35,40 +39,55 @@ class Register {
 		boolean p2 = first   .matches("^.{2,20}$");
 		boolean p3 = last    .matches("^.{2,20}$");
 		
-		if (p0 || p1 || p2 || p3) {
-			return "redirect:/member-register-error";
+		boolean success = false;
+		
+		if (p0 && p1 && p2 && p3) {
+			success = true;
 		}
 
-		Member m    = new Member();
-		m.email     = email;
-		m.firstName = first;
-		m.lastName  = last;
-		m.password  = Common.encrypt(password);
-		boolean success = true;
-		EntityManager manager = Storage.getManager();
-		try {
-			manager.getTransaction().begin();
-			manager.persist(m);
-			manager.getTransaction().commit();
-		} catch (Exception e) {
-			success = false;
+		if (success) {
+			EntityManager manager = Common.getManager();
+
+			try {
+				Team team   = manager.find(Team.class, 1);
+				Member m    = new Member();
+				m.email     = email;
+				m.firstName = first;
+				m.lastName  = last;
+				m.password  = Common.encrypt(password);
+				m.team      = team;
+
+				manager.getTransaction().begin();
+				manager.persist(m);
+				manager.getTransaction().commit();
+				
+				Activate a = new Activate();
+				a.member = m;
+				a.secret = Common.random(20);
+				manager.getTransaction().begin();
+				manager.persist(a);
+				manager.getTransaction().commit();
+
+				Email e = new Email();
+				e.sendActivationCode(m.email, a.secret, m.code);
+			} catch (Exception e) {	
+				// member_register_duplicated_email
+				success = false;
+			}
+			manager.close();
 		}
-		manager.close();
 		
 		if (success) {
-			// TODO: Send activation code
-			// but if system email is not set, 
-			// auto activate the account
 			return "redirect:/member-register-success";
-		} else {
-			// member_register_duplicated_email
-			return "redirect:/member-register-error";
 		}
+		
+		// TODO: Add error detail before return
+		return "redirect:/member-register-error";
 	}
 	
 	@RequestMapping("/member-register-success")
 	String showRegisterSuccess(Model m) {
-		m.addAttribute("title", "Registration Successfully");
+		m.addAttribute("title",  "Registration Successfully");
 		m.addAttribute("detail", "Please go to you mailbox to activate " +
 								 "your account.");
 		return "display";
@@ -76,7 +95,7 @@ class Register {
 	
 	@RequestMapping("/member-register-error")
 	String showRegisterError(Model m) {
-		m.addAttribute("title", "Registration Failed");
+		m.addAttribute("title",  "Registration Failed");
 		m.addAttribute("detail", "Unable to register with your email.");
 		return "display";
 	}
