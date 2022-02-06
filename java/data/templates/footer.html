@@ -12,9 +12,13 @@
 			<section class="col-12 col-sm-6 col-md-3">
 				<ul>
 					<li><a href="/">Home</a></li>
+					<#if member??>
+					<li><a href="/member-profile">Profile</a></li>
+					<li><a href="/member-logout">Log Out</a></li>
+					<#else>
 					<li><a href="/member-register">Register</a></li>
 					<li><a href="/member-login">Log In</a></li>
-					<li><a href="/">Menu Item</a></li>
+					</#if>
 				</ul>
 			</section>
 			<section class="col-12 col-sm-6 col-md-3">

@@ -2,8 +2,11 @@
 
 <nav>
 	<section class="container">
+		<#if member??>
+		<#else>
 		<a href="/member-login">Log In</a>
 		<a href="/member-register">Register</a>
+		</#if>
 	</section>
 </nav>
 <header>
@@ -14,8 +17,14 @@
 		<h2>
 			Benefit of using your platform
 		</h2>
-		<a href="/member-register"
-		   class="btn btn-primary">Register</a>
+		
+		<#if member??>
+			<a href="/member-profile"
+			   class="btn btn-primary">Profile</a>
+		<#else>
+			<a href="/member-register"
+			   class="btn btn-primary">Register</a>
+		</#if>
 	</section>
 </header>
 
