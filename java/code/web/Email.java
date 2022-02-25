@@ -13,8 +13,8 @@ import javax.mail.internet.InternetAddress;
 
 class Email {
 	
-	static String senderName     = "Old School";
-	static String senderAddress  = "system@oldschool.city";
+	static String senderName     = "Full Code";
+	static String senderAddress  = "administrator@fullcodehub.com";
 	static String senderPassword = "P@ssw0rd";
 	static String baseDomain     = "http://127.0.0.1:8864";
 	
