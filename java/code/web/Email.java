@@ -19,7 +19,7 @@ class Email {
 	static String baseDomain     = "http://127.0.0.1:8864";
 	
 	void sendActivationCode(
-			String target, 
+			String target,
 			String secret,
 			int code) {
 		String content = "Welcome to " + senderName + ". ";

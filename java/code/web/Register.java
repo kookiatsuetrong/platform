@@ -88,7 +88,7 @@ class Register {
 	@RequestMapping("/member-register-success")
 	String showRegisterSuccess(Model m) {
 		m.addAttribute("title",  "Registration Successfully");
-		m.addAttribute("detail", "Please go to you mailbox to activate " +
+		m.addAttribute("detail", "Please go to your mailbox to activate " +
 								 "your account.");
 		return "display";
 	}

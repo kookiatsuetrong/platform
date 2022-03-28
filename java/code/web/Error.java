@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.boot.web.servlet.error.ErrorController;
 
 @Controller
-class WebError implements ErrorController  {
+class Error implements ErrorController  {
 	
 	@GetMapping("/error")
 	String show(Model m) {
